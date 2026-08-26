@@ -143,6 +143,10 @@ fun MockLocationScreen(viewModel: MockLocationViewModel) {
 		}
 	}
 
+	val gpxMimeTypes = arrayOf(
+		"application/gpx+xml", "application/gpx", "application/xml", "text/xml", "application/octet-stream"
+	)
+
 	val filePickerLauncher = rememberLauncherForActivityResult(
 		contract = ActivityResultContracts.OpenDocument()
 	) { uri ->
@@ -161,7 +165,7 @@ fun MockLocationScreen(viewModel: MockLocationViewModel) {
 		Spacer(modifier = Modifier.height(24.dp))
 
 		Button(
-			onClick = { filePickerLauncher.launch(arrayOf("*/*")) }, enabled = !uiState.isPlaying, modifier = Modifier.fillMaxWidth()
+			onClick = { filePickerLauncher.launch(gpxMimeTypes) }, enabled = !uiState.isPlaying, modifier = Modifier.fillMaxWidth()
 		) {
 			Text("Open GPX File")
 		}
