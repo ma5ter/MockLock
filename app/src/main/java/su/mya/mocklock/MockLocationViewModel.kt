@@ -32,6 +32,15 @@ class MockLocationViewModel(application: Application) : AndroidViewModel(applica
 		}
 	}
 
+	/**
+	 * Adjusts the current playback position when paused.
+	 *
+	 * @param index 1-based target point index.
+	 */
+	fun seekTo(index: Int) {
+		PlaybackStateHolder.seekTo(index)
+	}
+
 	fun startPlayback() {
 		MockLocationService.startService(getApplication())
 	}

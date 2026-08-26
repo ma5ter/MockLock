@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +27,9 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
@@ -42,6 +45,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import java.util.Locale
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
 	private val viewModel: MockLocationViewModel by viewModels()
@@ -98,6 +103,14 @@ private fun hasLocationPermission(context: Context): Boolean {
 		context, Manifest.permission.ACCESS_COARSE_LOCATION
 	) == PackageManager.PERMISSION_GRANTED
 	return fineLocation || coarseLocation
+}
+
+private fun formatDuration(millis: Long): String {
+	val totalSeconds = millis.coerceAtLeast(0L) / 1000
+	val hours = totalSeconds / 3600
+	val minutes = (totalSeconds % 3600) / 60
+	val seconds = totalSeconds % 60
+	return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
 }
 
 @Composable
@@ -166,6 +179,47 @@ fun MockLocationScreen(viewModel: MockLocationViewModel) {
 				Spacer(modifier = Modifier.height(8.dp))
 				Text(text = "Latitude: ${uiState.currentLat}")
 				Text(text = "Longitude: ${uiState.currentLon}")
+
+				Spacer(modifier = Modifier.height(16.dp))
+
+				// Progress bar / knob slider
+				Box(
+					modifier = Modifier
+						.fillMaxWidth()
+						.height(44.dp), contentAlignment = Alignment.Center
+				) {
+					if (uiState.isPlaying) {
+						val progressFraction = if (uiState.totalPoints > 1) {
+							(uiState.currentIndex - 1).coerceAtLeast(0).toFloat() / (uiState.totalPoints - 1).toFloat()
+						} else {
+							0f
+						}
+						LinearProgressIndicator(
+							progress = { progressFraction.coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth()
+						)
+					} else {
+						Slider(
+							value = (uiState.currentIndex.coerceIn(1, maxOf(1, uiState.totalPoints)) - 1).toFloat(),
+							onValueChange = { newPos ->
+								viewModel.seekTo(newPos.roundToInt() + 1)
+							},
+							valueRange = 0f..maxOf(0, uiState.totalPoints - 1).toFloat(),
+							enabled = uiState.totalPoints > 1,
+							modifier = Modifier.fillMaxWidth()
+						)
+					}
+				}
+
+				val doneDist = DistanceUtils.getFormattedDistance(uiState.currentDistanceMeters).trim()
+				val totalDist = DistanceUtils.getFormattedDistance(uiState.totalDistanceMeters).trim()
+				val doneTime = formatDuration(uiState.currentDurationMillis)
+				val totalTime = formatDuration(uiState.totalDurationMillis)
+
+				Text(
+					text = "$doneDist / $totalDist - $doneTime / $totalTime",
+					style = MaterialTheme.typography.bodyMedium,
+					modifier = Modifier.align(Alignment.CenterHorizontally)
+				)
 			}
 		}
 

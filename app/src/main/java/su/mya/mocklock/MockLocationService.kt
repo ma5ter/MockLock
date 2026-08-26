@@ -83,15 +83,26 @@ class MockLocationService : Service() {
 				mockLocationManager.start()
 				PlaybackStateHolder.updateState { it.copy(isPlaying = true, statusMessage = "Playing track...") }
 
-				var previousPoint: GpxPoint? = null
-				for (i in points.indices) {
+				val startIndex = PlaybackStateHolder.uiState.value.let { state ->
+					if (state.currentIndex >= points.size) 0 else (state.currentIndex - 1).coerceAtLeast(0)
+				}
+				var previousPoint: GpxPoint? = if (startIndex > 0) points[startIndex - 1] else null
+
+				for (i in startIndex until points.size) {
 					val currentPoint = points[i]
 					mockLocationManager.pushLocation(currentPoint, previousPoint)
 					previousPoint = currentPoint
 
+					val dist = PlaybackStateHolder.cumulativeDistances.getOrElse(i) { 0.0 }
+					val dur = PlaybackStateHolder.cumulativeTimes.getOrElse(i) { 0L }
+
 					PlaybackStateHolder.updateState {
 						it.copy(
-							currentIndex = i + 1, currentLat = currentPoint.latitude, currentLon = currentPoint.longitude
+							currentIndex = i + 1,
+							currentLat = currentPoint.latitude,
+							currentLon = currentPoint.longitude,
+							currentDistanceMeters = dist,
+							currentDurationMillis = dur
 						)
 					}
 					updateNotification("Point ${i + 1}/${points.size} (${currentPoint.latitude}, ${currentPoint.longitude})")
