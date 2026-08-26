@@ -33,6 +33,10 @@ android {
 		}
 	}
 
+	lint {
+		disable += "MockLocation"
+	}
+
 	buildTypes {
 		release {
 			isMinifyEnabled = false
