@@ -1,0 +1,25 @@
+Categories:
+  - Navigation
+  - Development
+License: GPL-3.0-only
+AuthorName: ma5ter
+SourceCode: https://github.com/ma5ter/MockLock
+IssueTracker: https://github.com/ma5ter/MockLock/issues
+
+AutoName: MockLock
+
+RepoType: git
+Repo: https://github.com/ma5ter/MockLock
+
+Builds:
+  - versionName: 0.1.0
+    versionCode: 10
+    commit: v0.1.0
+    subdir: app
+    gradle:
+      - yes
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 0.1.0
+CurrentVersionCode: 10

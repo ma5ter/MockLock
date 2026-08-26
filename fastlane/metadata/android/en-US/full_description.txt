@@ -1,0 +1,18 @@
+GPX Mock Location allows you to simulate GPS movement on your Android device by replaying tracks and waypoints from standard GPX files.
+
+The app parses coordinates and timestamps directly from your GPX files, calculating delays between points to replicate real-world movement speeds. Playback runs continuously in a foreground service, allowing location simulation to proceed while using other applications or with the screen turned off.
+
+<b>Features:</b>
+• Replay GPX routes containing track points (&lt;trkpt&gt;) or waypoints (&lt;wpt&gt;).
+• Accurate playback intervals derived from ISO 8601 timestamps.
+• Open GPX files via the built-in file picker or directly from external file managers.
+• Reliable foreground service with persistent status notification.
+• Clean, modern interface built with Jetpack Compose and Material 3 dynamic theming.
+• Completely offline and privacy-friendly: no tracking, no ads, and no network requests required.
+
+<b>Setup Instructions:</b>
+To allow the app to inject mock locations:
+1. Enable Developer Options on your device (Settings &gt; About phone &gt; tap "Build number" 7 times).
+2. Go to Settings &gt; System &gt; Developer options.
+3. Tap "Select mock location app" and choose "GPX Mock Location".
+4. Open the app, grant the required location permissions, select a GPX file, and press "Start".

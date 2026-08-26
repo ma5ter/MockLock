@@ -1,0 +1,1 @@
+A reliable mock location provider that actually works to replay GPX tracks.
