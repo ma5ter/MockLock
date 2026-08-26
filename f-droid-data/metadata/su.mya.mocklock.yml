@@ -12,14 +12,14 @@ RepoType: git
 Repo: https://github.com/ma5ter/MockLock
 
 Builds:
-  - versionName: 0.1.0
-    versionCode: 10
-    commit: v0.1.0
+  - versionName: 0.2.0
+    versionCode: 20
+    commit: v0.2.0
     subdir: app
     gradle:
       - yes
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: 0.1.0
-CurrentVersionCode: 10
+CurrentVersion: 0.2.0
+CurrentVersionCode: 20
