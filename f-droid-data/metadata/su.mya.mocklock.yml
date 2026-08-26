@@ -1,25 +1,25 @@
 Categories:
-  - Navigation
   - Development
+  - Navigation
 License: GPL-3.0-only
 AuthorName: ma5ter
 SourceCode: https://github.com/ma5ter/MockLock
 IssueTracker: https://github.com/ma5ter/MockLock/issues
 
-AutoName: MockLock
+AutoName: GPX Mock Location
 
 RepoType: git
 Repo: https://github.com/ma5ter/MockLock
 
 Builds:
-  - versionName: 0.2.0
-    versionCode: 20
-    commit: v0.2.0
+  - versionName: 0.2.1
+    versionCode: 21
+    commit: v0.2.1
     subdir: app
     gradle:
       - yes
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: 0.2.0
-CurrentVersionCode: 20
+CurrentVersion: 0.2.1
+CurrentVersionCode: 21
