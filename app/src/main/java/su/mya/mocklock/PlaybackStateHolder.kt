@@ -25,8 +25,7 @@ object PlaybackStateHolder {
 	fun setPoints(points: List<GpxPoint>) {
 		trackPoints = points
 		_uiState.value = UiState(
-			totalPoints = points.size,
-			statusMessage = "Loaded ${points.size} track points."
+			totalPoints = points.size, statusMessage = "Loaded ${points.size} track points."
 		)
 	}
 }

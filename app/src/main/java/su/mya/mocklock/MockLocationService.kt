@@ -55,7 +55,6 @@ class MockLocationService : Service() {
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 		when (intent?.action) {
 			ACTION_START -> {
-				// Immediately promote service to foreground to fulfill startForegroundService contract
 				val notification = buildNotification("Preparing playback...")
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 					startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
@@ -84,15 +83,15 @@ class MockLocationService : Service() {
 				mockLocationManager.start()
 				PlaybackStateHolder.updateState { it.copy(isPlaying = true, statusMessage = "Playing track...") }
 
+				var previousPoint: GpxPoint? = null
 				for (i in points.indices) {
 					val currentPoint = points[i]
-					mockLocationManager.pushLocation(currentPoint)
+					mockLocationManager.pushLocation(currentPoint, previousPoint)
+					previousPoint = currentPoint
 
 					PlaybackStateHolder.updateState {
 						it.copy(
-							currentIndex = i + 1,
-							currentLat = currentPoint.latitude,
-							currentLon = currentPoint.longitude
+							currentIndex = i + 1, currentLat = currentPoint.latitude, currentLon = currentPoint.longitude
 						)
 					}
 					updateNotification("Point ${i + 1}/${points.size} (${currentPoint.latitude}, ${currentPoint.longitude})")
@@ -123,8 +122,7 @@ class MockLocationService : Service() {
 		mockLocationManager.stop()
 		PlaybackStateHolder.updateState {
 			it.copy(
-				isPlaying = false,
-				statusMessage = "Playback stopped."
+				isPlaying = false, statusMessage = "Playback stopped."
 			)
 		}
 		stopForeground(STOP_FOREGROUND_REMOVE)
@@ -133,9 +131,7 @@ class MockLocationService : Service() {
 
 	private fun createNotificationChannel() {
 		val channel = NotificationChannel(
-			NOTIFICATION_CHANNEL_ID,
-			"Mock Location Playback",
-			NotificationManager.IMPORTANCE_LOW
+			NOTIFICATION_CHANNEL_ID, "Mock Location Playback", NotificationManager.IMPORTANCE_LOW
 		).apply {
 			description = "Active mock location playback notification"
 		}
@@ -145,19 +141,11 @@ class MockLocationService : Service() {
 
 	private fun buildNotification(contentText: String): Notification {
 		val pendingIntent = PendingIntent.getActivity(
-			this,
-			0,
-			Intent(this, MainActivity::class.java),
-			PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+			this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
 		)
 
-		return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-			.setContentTitle("Mock Location Playing")
-			.setContentText(contentText)
-			.setSmallIcon(R.drawable.service_icon)
-			.setContentIntent(pendingIntent)
-			.setOngoing(true)
-			.build()
+		return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle("Mock Location Playing").setContentText(contentText)
+			.setSmallIcon(R.drawable.service_icon).setContentIntent(pendingIntent).setOngoing(true).build()
 	}
 
 	private fun updateNotification(contentText: String) {

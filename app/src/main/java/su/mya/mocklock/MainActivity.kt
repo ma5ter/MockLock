@@ -67,8 +67,7 @@ class MainActivity : ComponentActivity() {
 				Surface(
 					modifier = Modifier
 						.fillMaxSize()
-						.safeDrawingPadding(),
-					color = MaterialTheme.colorScheme.background
+						.safeDrawingPadding(), color = MaterialTheme.colorScheme.background
 				) {
 					MockLocationScreen(viewModel)
 				}
@@ -93,12 +92,10 @@ class MainActivity : ComponentActivity() {
 
 private fun hasLocationPermission(context: Context): Boolean {
 	val fineLocation = ContextCompat.checkSelfPermission(
-		context,
-		Manifest.permission.ACCESS_FINE_LOCATION
+		context, Manifest.permission.ACCESS_FINE_LOCATION
 	) == PackageManager.PERMISSION_GRANTED
 	val coarseLocation = ContextCompat.checkSelfPermission(
-		context,
-		Manifest.permission.ACCESS_COARSE_LOCATION
+		context, Manifest.permission.ACCESS_COARSE_LOCATION
 	) == PackageManager.PERMISSION_GRANTED
 	return fineLocation || coarseLocation
 }
@@ -109,8 +106,7 @@ fun MockLocationScreen(viewModel: MockLocationViewModel) {
 	val uiState by viewModel.uiState.collectAsState()
 
 	val permissionsToRequest = mutableListOf(
-		Manifest.permission.ACCESS_FINE_LOCATION,
-		Manifest.permission.ACCESS_COARSE_LOCATION
+		Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
 	).apply {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 			add(Manifest.permission.POST_NOTIFICATIONS)
@@ -120,8 +116,7 @@ fun MockLocationScreen(viewModel: MockLocationViewModel) {
 	val permissionLauncher = rememberLauncherForActivityResult(
 		contract = ActivityResultContracts.RequestMultiplePermissions()
 	) { permissions ->
-		val locationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-				permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+		val locationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true || permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
 		if (locationGranted) {
 			viewModel.startPlayback()
 		} else {
@@ -144,21 +139,16 @@ fun MockLocationScreen(viewModel: MockLocationViewModel) {
 	Column(
 		modifier = Modifier
 			.fillMaxSize()
-			.padding(24.dp),
-		horizontalAlignment = Alignment.CenterHorizontally,
-		verticalArrangement = Arrangement.Center
+			.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
 	) {
 		Text(
-			text = "GPX Mock Location Player",
-			style = MaterialTheme.typography.headlineSmall
+			text = "GPX Mock Location Player", style = MaterialTheme.typography.headlineSmall
 		)
 
 		Spacer(modifier = Modifier.height(24.dp))
 
 		Button(
-			onClick = { filePickerLauncher.launch(arrayOf("*/*")) },
-			enabled = !uiState.isPlaying,
-			modifier = Modifier.fillMaxWidth()
+			onClick = { filePickerLauncher.launch(arrayOf("*/*")) }, enabled = !uiState.isPlaying, modifier = Modifier.fillMaxWidth()
 		) {
 			Text("Open GPX File")
 		}
@@ -182,8 +172,7 @@ fun MockLocationScreen(viewModel: MockLocationViewModel) {
 		Spacer(modifier = Modifier.height(24.dp))
 
 		Row(
-			modifier = Modifier.fillMaxWidth(),
-			horizontalArrangement = Arrangement.spacedBy(16.dp)
+			modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)
 		) {
 			Button(
 				onClick = {
@@ -192,20 +181,15 @@ fun MockLocationScreen(viewModel: MockLocationViewModel) {
 					} else {
 						permissionLauncher.launch(permissionsToRequest)
 					}
-				},
-				enabled = !uiState.isPlaying && uiState.totalPoints > 0,
-				modifier = Modifier.weight(1f)
+				}, enabled = !uiState.isPlaying && uiState.totalPoints > 0, modifier = Modifier.weight(1f)
 			) {
 				Text("Start")
 			}
 
 			Button(
-				onClick = { viewModel.stopPlayback() },
-				enabled = uiState.isPlaying,
-				colors = ButtonDefaults.buttonColors(
+				onClick = { viewModel.stopPlayback() }, enabled = uiState.isPlaying, colors = ButtonDefaults.buttonColors(
 					containerColor = MaterialTheme.colorScheme.error
-				),
-				modifier = Modifier.weight(1f)
+				), modifier = Modifier.weight(1f)
 			) {
 				Text("Stop")
 			}
