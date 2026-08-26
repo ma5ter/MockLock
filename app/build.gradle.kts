@@ -12,8 +12,8 @@ android {
 		applicationId = "su.mya.mocklock"
 		minSdk = 26
 		targetSdk = 37
-		versionCode = 22
-		versionName = "0.2.2"
+		versionCode = 23
+		versionName = "0.2.3"
 	}
 
 	dependenciesInfo {
