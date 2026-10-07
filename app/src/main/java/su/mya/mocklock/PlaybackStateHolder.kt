@@ -109,7 +109,7 @@ object PlaybackStateHolder {
 			val prev = points[i - 1]
 			val curr = points[i]
 			val interval = curr.timeMillis - prev.timeMillis
-			val stepDuration = if (interval > 0) interval.coerceIn(100L, 10000L) else 1000L
+			val stepDuration = if (interval > 0) interval.coerceAtLeast(100L) else 1000L
 			runningTime += stepDuration
 			times.add(runningTime)
 		}

@@ -15,7 +15,7 @@ Binaries: https://github.com/ma5ter/MockLock/releases/download/v%v/app-release.a
 Builds:
   - versionName: 0.2.3
     versionCode: 23
-    commit: 2d01e15b6cb80dbc8e877be074cc3a7342f49e6e
+    commit: 8d45a0c07848d5f24ce1ce62d61b08c94f7f2b2a
     subdir: app
     gradle:
       - yes

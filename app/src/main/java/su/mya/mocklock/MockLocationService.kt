@@ -110,7 +110,7 @@ class MockLocationService : Service() {
 					if (i < points.size - 1) {
 						val nextPoint = points[i + 1]
 						val interval = nextPoint.timeMillis - currentPoint.timeMillis
-						val sleepDuration = if (interval > 0) interval.coerceIn(100L, 10000L) else 1000L
+						val sleepDuration = if (interval > 0) interval.coerceAtLeast(100L) else 1000L
 						delay(sleepDuration.milliseconds)
 					}
 				}

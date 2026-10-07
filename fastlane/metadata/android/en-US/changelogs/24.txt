@@ -1,0 +1,1 @@
+Removed the 10-second playback interval cap so long pauses between track points replay at their original timing.

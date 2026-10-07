@@ -1,7 +1,8 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
 	alias(libs.plugins.android.application)
-	alias(libs.plugins.kotlin.android)
-	alias(libs.plugins.kotlin.compose)
+	alias(libs.plugins.kotlin.compose.compiler)
 }
 
 android {
@@ -12,8 +13,8 @@ android {
 		applicationId = "su.mya.mocklock"
 		minSdk = 26
 		targetSdk = 37
-		versionCode = 23
-		versionName = "0.2.3"
+		versionCode = 24
+		versionName = "0.2.4"
 	}
 
 	dependenciesInfo {
@@ -51,11 +52,14 @@ android {
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
 	}
-	kotlinOptions {
-		jvmTarget = "17"
-	}
 	buildFeatures {
 		compose = true
+	}
+}
+
+kotlin {
+	compilerOptions {
+		jvmTarget = JvmTarget.JVM_17
 	}
 }
 
